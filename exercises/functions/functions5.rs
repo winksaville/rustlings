@@ -1,7 +1,7 @@
 // functions5.rs
 // Make me compile! Execute `rustlings hint functions5` for hints :)
 
-// I AM NOT DONE
+// I AM DONE
 
 fn main() {
     let answer = square(3);
@@ -9,5 +9,9 @@ fn main() {
 }
 
 fn square(num: i32) -> i32 {
-    num * num;
+    // Answer 1
+    // return num * num;
+
+    // Answer 2
+    num * num
 }
