@@ -11,17 +11,34 @@
 // Execute the command `rustlings hint collections3` if you need
 // hints.
 
-// I AM NOT DONE
+// I AM DONE
 
 use std::collections::HashMap;
 
 fn fruit_basket() -> HashMap<String, u32> {
-    let mut basket = // TODO: declare your hash map here.
+    // Answer 1
+    let mut basket = HashMap::new();
+    //let mut basket = HashMap::<String, u32>::new();
 
     // Two bananas are already given for you :)
     basket.insert(String::from("banana"), 2);
 
     // TODO: Put more fruits in your basket here.
+    basket.insert(String::from("apple"), 1);
+    basket.insert(String::from("pears"), 2);
+    basket.insert(String::from("tomato"), 3);
+    basket.insert(String::from("kiwi"), 3);
+
+    // Answer 2 from:
+    //    https://doc.rust-lang.org/nightly/std/collections/struct.HashMap.html
+    //    "A HashMap ... initialized from an array"
+    // let mut basket: HashMap<String, u32> = [
+    //     ("banna".to_string(), 2),
+    //     ("apple".to_string(), 1),
+    //     ("pears".to_string(), 2),
+    //     ("tomato".to_string(), 3),
+    //     ("kiwi".to_string(), 3),
+    // ] .iter().cloned().collect();
 
     basket
 }
