@@ -16,16 +16,57 @@
 // There are at least two ways to implement this that are both correct-- but
 // one is a lot shorter! Execute `rustlings hint errors2` for hints to both ways.
 
-// I AM NOT DONE
+// I AM DONE
 
 use std::num::ParseIntError;
+use std::mem::discriminant;
 
 pub fn total_cost(item_quantity: &str) -> Result<i32, ParseIntError> {
     let processing_fee = 1;
     let cost_per_item = 5;
-    let qty = item_quantity.parse::<i32>();
 
-    Ok(qty * cost_per_item + processing_fee)
+    // Answer 1
+    //let qty = item_quantity.parse::<i32>()?;
+    //Ok(qty * cost_per_item + processing_fee)
+
+    // Answer 2
+    //let qty = match item_quantity.parse::<i32>() {
+    //    Ok(qty) => return Ok(qty * cost_per_item + processing_fee),
+    //    Err(e) => return Err(e),
+    //};
+
+    // Answer 3 How would you use an if/else ladder to instead of a match?
+    // Note: This doesn't compile!
+    let r = item_quantity.parse::<i32>();
+    let rd = discriminant(&r);
+    let d = discriminant(&Result::<i32, String>::Ok(123));
+    println!("rd={:?} d={:?}", rd, d);
+
+    // Verify that changing the "values" (i32 or string)
+    // doesn't change the discriminant
+    let ds = discriminant(&Result::<i32, String>::Ok(123));
+    assert_eq!(format!("{:?}", ds), "Discriminant(0)");
+    let ds = discriminant(&Result::<i32, String>::Ok(124));
+    assert_eq!(format!("{:?}", ds), "Discriminant(0)");
+    let ds = discriminant(&Result::<i32, String>::Err("bad news".into()));
+    assert_eq!(format!("{:?}", ds), "Discriminant(1)");
+    let ds = discriminant(&Result::<i32, String>::Err("really bad news".into()));
+    assert_eq!(format!("{:?}", ds), "Discriminant(1)");
+
+    
+    // Seems you can't compare discriminant's directly :(
+    //if discriminant(&r) == discriminant(&Result::<i32, String>::Ok(0)) { // fails
+    //if rd == d { // fails
+    
+    // But you can compare their Display'd valued
+    if format!("{:?}", rd) == format!("{:?}", d).as_str() {
+        println!("rd == d");
+        let qty = r.unwrap();
+        Ok(qty * cost_per_item + processing_fee)
+    } else {
+        println!("rd != d");
+        r
+    }
 }
 
 #[cfg(test)]
