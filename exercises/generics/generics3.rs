@@ -10,18 +10,56 @@
 
 // Execute 'rustlings hint generics3' for hints!
 
-// I AM NOT DONE
+// I AM DONE
 
-pub struct ReportCard {
-    pub grade: f32,
+use std::fmt;
+use fmt::Display;
+use fmt::Formatter;
+
+pub struct ReportCard<T> {
+    pub grade: T,
     pub student_name: String,
     pub student_age: u8,
 }
 
-impl ReportCard {
-    pub fn print(&self) -> String {
-        format!("{} ({}) - achieved a grade of {}",
+//// Answer 1
+//impl Display for ReportCard<f32> {
+//    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+//        write!(f, "{} ({}) - achieved a grade of {}",
+//            &self.student_name, &self.student_age, &self.grade)
+//    }
+//}
+//
+//impl ReportCard<f32> {
+//    pub fn print(&self) -> String {
+//        format!("{}", &self)
+//    }
+//}
+//
+//impl Display for ReportCard<String> {
+//    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+//        write!(f, "{} ({}) - achieved a grade of {}",
+//            &self.student_name, &self.student_age, &self.grade)
+//    }
+//}
+//
+//impl ReportCard<String> {
+//    pub fn print(&self) -> String {
+//        format!("{}", &self)
+//    }
+//}
+
+// Answer 2
+impl<T: Display> Display for ReportCard<T> {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        write!(f, "{} ({}) - achieved a grade of {}",
             &self.student_name, &self.student_age, &self.grade)
+    }
+}
+
+impl<T: Display> ReportCard<T> {
+    pub fn print(&self) -> String {
+        format!("{}", &self)
     }
 }
 
@@ -31,7 +69,7 @@ mod tests {
 
     #[test]
     fn generate_numeric_report_card() {
-        let report_card = ReportCard {
+        let report_card = ReportCard::<f32> {
             grade: 2.1,
             student_name: "Tom Wriggle".to_string(),
             student_age: 12,
@@ -45,8 +83,8 @@ mod tests {
     #[test]
     fn generate_alphabetic_report_card() {
         // TODO: Make sure to change the grade here after you finish the exercise.
-        let report_card = ReportCard {
-            grade: 2.1,
+        let report_card = ReportCard::<String> {
+            grade: "A+".to_string(),
             student_name: "Gary Plotter".to_string(),
             student_age: 11,
         };
