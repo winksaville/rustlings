@@ -10,7 +10,7 @@ struct Person {
     age: usize,
 }
 
-// I AM NOT DONE
+// I AM DONE
 // Steps:
 // 1. If the length of the provided string is 0, then return an error
 // 2. Split the given string on the commas present in it
@@ -20,9 +20,34 @@ struct Person {
 //    with something like `"4".parse::<usize>()`.
 // If while parsing the age, something goes wrong, then return an error
 // Otherwise, then return a Result of a Person object
+
+impl Person {
+    fn new(name: &str, age: usize) -> Person {
+        let name = String::from(name);
+        Person {
+            name,
+            age,
+        }
+    }
+}
+
 impl FromStr for Person {
     type Err = String;
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        let fields: Vec<_> = s.split(',').collect();
+        if fields.len() != 2 {
+            Err(String::from("Person::from_str needs 2 fields \"name,age\""))
+        } else {
+            if fields[0].len() > 0 {
+                let age = match fields[1].parse::<usize>() {
+                    Ok(a) => a,
+                    _ => return Err(String::from("Person::from_str second field is not a usize")),
+                };
+                Ok(Person::new(fields[0], age))
+            } else {
+                Err(String::from("Person::from_str first field, name, was empty"))
+            }
+        }
     }
 }
 
@@ -81,5 +106,11 @@ mod tests {
     #[should_panic]
     fn missing_name_and_invalid_age() {
         ",one".parse::<Person>().unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn negative_age() {
+        "John,-20".parse::<Person>().unwrap();
     }
 }
